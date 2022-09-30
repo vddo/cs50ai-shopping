@@ -1,3 +1,8 @@
+"""
+v0.01 implemented and tested load_data() 
+v0.00 original code
+"""
+
 import csv
 import sys
 
@@ -59,7 +64,72 @@ def load_data(filename):
     labels should be the corresponding list of labels, where each label
     is 1 if Revenue is true, and 0 otherwise.
     """
-    raise NotImplementedError
+    # Dict containing months with index
+    list_months = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ]
+    dict_months = dict()
+    i = 0
+    for month in list_months:
+        dict_months[month] = i
+        i += 1
+    
+    # Empty lists for evidence and labels
+    evidence = list()
+    labels = list()
+
+    with open('shopping.csv', newline='') as f:
+        reader = csv.reader(f)
+        # Skip the header
+        next(reader, None)
+        for row in reader:
+            # Append Administrative, int, [0]
+            # Administrative_Duration, float, [1]
+            # Informational, int, [2]
+            # Informational_Duration, float [3]
+            # ProductRelated, int, [4]
+            # ProductRelated_Duration, float [5]
+            # BounceRates, float [6]
+            # ExitRates, float [7]
+            # PageValues, float [8]
+            # SpecialDay, float [9]
+            # Month, index from dict_months [10]
+            # OperatingSystems, int, [11]
+            # Browser, int, [12]
+            # Region, int, [13]
+            # TrafficType, int, [14]
+            # VisitorType, int, [15]
+            # Weekend, int, [16]
+
+            # Rewrite visitor type
+            if row[15] == 'Returning_Visitor':
+                visitor_type = 1
+            else:
+                visitor_type = 0
+
+            # Rewrite weekend
+            if row[16] == 'TRUE':
+                weekend = 1
+            else:
+                weekend = 0
+
+            evidence.append([
+                int(row[0]), float(row[1]), int(row[2]), float(row[3]), int(row[4]), float(row[5]),
+                float(row[6]), float(row[7]), float(row[8]), float(row[9]), dict_months[row[10]], 
+                int(row[11]), int(row[12]), int(row[13]), int(row[14]), visitor_type, weekend
+            ])
+
+            # Rewrite revenue
+            if row[-1] == 'TRUE':
+                revenue = 1
+            else:
+                revenue = 0
+
+            labels.append(
+                revenue
+            )
+    # Return tuple with evidence and labels lists
+    return((evidence, labels))
 
 
 def train_model(evidence, labels):
