@@ -1,4 +1,5 @@
 """
+v0.02 train
 v0.01 implemented and tested load_data() 
 v0.00 original code
 """
@@ -137,7 +138,13 @@ def train_model(evidence, labels):
     Given a list of evidence lists and a list of labels, return a
     fitted k-nearest neighbor model (k=1) trained on the data.
     """
-    raise NotImplementedError
+    # Initialize k-neighbor model; k=1
+    model = KNeighborsClassifier(n_neighbors=1)
+    
+    # Fit model
+    model.fit(evidence, labels)
+    
+    return model
 
 
 def evaluate(labels, predictions):
